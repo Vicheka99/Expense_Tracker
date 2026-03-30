@@ -1,15 +1,42 @@
+# Built artifacts
+bin/
+gen/
+out/
+build/
+.gradle/
+.navigation/
+
+# IDE settings and configurations
+.idea/
 *.iml
-.gradle
+*.iws
+*.ipr
 /local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
 .DS_Store
-/build
-/captures
+captures/
 .externalNativeBuild
-.cxx
-local.properties
+.cxx/
+
+# User-specific stuff
+*.user
+*.suo
+*.pdb
+*.swp
+*.bak
+
+# Log files
+*.log
+
+# Keystores
+*.jks
+*.keystore
+!debug.keystore
+
+# Google Services
+# google-services.json
+
+# Crashlytics
+com_crashlytics_export_strings.xml
+crashlytics.properties
+crashlytics-build.properties
+fabric.properties
