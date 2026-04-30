@@ -3,36 +3,178 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_grey"
+    android:background="#F5F5F5"
     android:orientation="vertical">
 
-    <!-- Top Bar -->
-    <RelativeLayout
+    <!-- 1. DARK TOP BANNER SECTION -->
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp">
-        <ImageView
-            android:layout_width="28dp"
-            android:layout_height="28dp"
-            android:src="@drawable/ic_menu"
-            android:layout_centerVertical="true"/>
+        android:background="@color/navy_dark"
+        android:paddingBottom="24dp">
+
+        <!-- TOP NAVIGATION BAR (Sidebar, Title, Bell) -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/topBar"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:paddingHorizontal="16dp"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <!-- Sidebar Icon (Using system drawer icon) -->
+            <ImageView
+                android:id="@+id/ivSidebar"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:src="@android:drawable/ic_menu_sort_by_size"
+                android:contentDescription="Sidebar"
+                app:tint="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!-- Title: Home -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Home"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!-- Notification Bell (Using system popup icon) -->
+            <ImageView
+                android:id="@+id/ivNotification"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:src="@android:drawable/ic_popup_reminder"
+                android:contentDescription="Notifications"
+                app:tint="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- WELCOME TEXT & BALANCE -->
         <TextView
+            android:id="@+id/tvHello"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Home"
-            android:textColor="@android:color/black"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_centerInParent="true"/>
-        <ImageView
-            android:layout_width="28dp"
-            android:layout_height="28dp"
-            android:src="@drawable/ic_notification"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            app:tint="@color/accent_orange"/>
-    </RelativeLayout>
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="16dp"
+            android:text="Hello, John!"
+            android:textColor="@color/text_grey"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/topBar" />
 
+        <TextView
+            android:id="@+id/tvBalance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="8dp"
+            android:text="$2,150.75"
+            android:textColor="@color/white"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvHello" />
+
+        <!-- Profile Icon (Square J) -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginEnd="24dp"
+            app:cardBackgroundColor="@color/accent_orange"
+            app:cardCornerRadius="8dp"
+            app:strokeWidth="0dp"
+            app:layout_constraintBottom_toBottomOf="@id/tvBalance"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvHello">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="J"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- 2. SIDE-BY-SIDE INCOME/EXPENSE CARDS -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:paddingHorizontal="24dp"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            app:layout_constraintTop_toBottomOf="@id/tvBalance">
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                app:cardBackgroundColor="#2A2A3C"
+                app:cardCornerRadius="16dp"
+                app:strokeWidth="0dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Income"
+                        android:textColor="@color/text_grey" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="$ 1200 ↑"
+                        android:textColor="@color/income_green"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                app:cardBackgroundColor="#2A2A3C"
+                app:cardCornerRadius="16dp"
+                app:strokeWidth="0dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Expenses"
+                        android:textColor="@color/text_grey" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="$ 750 ↓"
+                        android:textColor="@color/expense_red"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- 3. SCROLLABLE CONTENT -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -43,155 +185,88 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- Balance Card -->
+            <!-- Chart Card -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/main_blue"
+                android:layout_marginBottom="24dp"
                 app:cardCornerRadius="24dp"
+                app:cardElevation="8dp"
                 app:strokeWidth="0dp">
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="24dp"
-                    android:orientation="vertical">
-
+                    android:orientation="vertical"
+                    android:padding="20dp">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Total Balance"
-                        android:textColor="#E0E0E0"
-                        android:textSize="16sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="$4,680.00"
-                        android:textColor="@color/white"
-                        android:textSize="32sp"
+                        android:text="Spending"
+                        android:textColor="@android:color/black"
                         android:textStyle="bold"
-                        android:layout_marginTop="4dp"/>
-
+                        android:textSize="18sp"/>
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="100dp"
+                        android:layout_marginTop="16dp"
+                        android:gravity="bottom"
                         android:orientation="horizontal"
-                        android:layout_marginTop="24dp"
-                        android:weightSum="2">
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical">
-                            <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@android:drawable/arrow_down_float" app:tint="@color/white" android:alpha="0.7"/>
-                            <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical" android:layout_marginStart="8dp">
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Income" android:textColor="#E0E0E0" android:textSize="12sp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="$3,500.00" android:textColor="@color/white" android:textStyle="bold" android:textSize="16sp"/>
-                            </LinearLayout>
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical">
-                            <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@android:drawable/arrow_up_float" app:tint="@color/white" android:alpha="0.7"/>
-                            <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical" android:layout_marginStart="8dp">
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Expense" android:textColor="#E0E0E0" android:textSize="12sp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="$1,230.00" android:textColor="@color/white" android:textStyle="bold" android:textSize="16sp"/>
-                            </LinearLayout>
-                        </LinearLayout>
-
+                        android:weightSum="5">
+                        <View android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1" android:layout_margin="4dp" android:background="#FDEEE9"/>
+                        <View android:layout_width="0dp" android:layout_height="60dp" android:layout_weight="1" android:layout_margin="4dp" android:background="#FDEEE9"/>
+                        <View android:layout_width="0dp" android:layout_height="30dp" android:layout_weight="1" android:layout_margin="4dp" android:background="#FDEEE9"/>
+                        <View android:layout_width="0dp" android:layout_height="80dp" android:layout_weight="1" android:layout_margin="4dp" android:background="@color/accent_orange"/>
+                        <View android:layout_width="0dp" android:layout_height="50dp" android:layout_weight="1" android:layout_margin="4dp" android:background="#FDEEE9"/>
                     </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Transactions Header -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Recent Transactions"
+                android:textColor="@android:color/black"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:layout_marginBottom="16dp"/>
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp">
+                android:paddingVertical="12dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Transactions"
+                    android:text="Groceries"
                     android:textColor="@android:color/black"
-                    android:textStyle="bold"
-                    android:textSize="18sp"/>
+                    android:textSize="16sp"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="See All"
+                    android:text="-$45.00"
                     android:layout_alignParentEnd="true"
-                    android:textColor="@color/text_grey"/>
+                    android:textColor="@color/expense_red"
+                    android:textStyle="bold"/>
             </RelativeLayout>
 
-            <!-- Transaction Items -->
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="16dp">
-
-                <!-- Item 1 -->
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="match_parent"
+                android:paddingVertical="12dp">
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="0dp"
-                    app:cardBackgroundColor="@color/white"
-                    android:layout_marginBottom="12dp">
-                    <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="12dp">
-                        <View android:id="@+id/icon1" android:layout_width="45dp" android:layout_height="45dp" android:background="@drawable/bg_transaction_icon"/>
-                        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical" android:layout_toEndOf="@id/icon1" android:layout_marginStart="12dp">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Star Technology" android:textColor="@android:color/black" android:textStyle="bold" android:textSize="16sp"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="24 Nov, 2022" android:textColor="@color/text_grey" android:textSize="12sp"/>
-                        </LinearLayout>
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="+$350" android:layout_alignParentEnd="true" android:layout_centerVertical="true" android:textColor="@color/income_green" android:textStyle="bold" android:textSize="16sp"/>
-                    </RelativeLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-                <!-- Item 2 -->
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="match_parent"
+                    android:text="Salary"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp"/>
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="0dp"
-                    app:cardBackgroundColor="@color/white"
-                    android:layout_marginBottom="12dp">
-                    <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="12dp">
-                        <View android:id="@+id/icon2" android:layout_width="45dp" android:layout_height="45dp" android:background="@drawable/bg_transaction_icon"/>
-                        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical" android:layout_toEndOf="@id/icon2" android:layout_marginStart="12dp">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Valent" android:textColor="@android:color/black" android:textStyle="bold" android:textSize="16sp"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="22 Nov, 2022" android:textColor="@color/text_grey" android:textSize="12sp"/>
-                        </LinearLayout>
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="-$200" android:layout_alignParentEnd="true" android:layout_centerVertical="true" android:textColor="@color/expense_red" android:textStyle="bold" android:textSize="16sp"/>
-                    </RelativeLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-                <!-- Item 3 -->
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="0dp"
-                    app:cardBackgroundColor="@color/white"
-                    android:layout_marginBottom="12dp">
-                    <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="12dp">
-                        <View android:id="@+id/icon3" android:layout_width="45dp" android:layout_height="45dp" android:background="@drawable/bg_transaction_icon"/>
-                        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical" android:layout_toEndOf="@id/icon3" android:layout_marginStart="12dp">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Original Payment" android:textColor="@android:color/black" android:textStyle="bold" android:textSize="16sp"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="20 Nov, 2022" android:textColor="@color/text_grey" android:textSize="12sp"/>
-                        </LinearLayout>
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="+$480" android:layout_alignParentEnd="true" android:layout_centerVertical="true" android:textColor="@color/income_green" android:textStyle="bold" android:textSize="16sp"/>
-                    </RelativeLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-            </LinearLayout>
+                    android:text="+$1000.00"
+                    android:layout_alignParentEnd="true"
+                    android:textColor="@color/income_green"
+                    android:textStyle="bold"/>
+            </RelativeLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </LinearLayout>
