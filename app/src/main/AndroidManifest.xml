@@ -21,6 +21,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!-- Add this line to register your new page -->
+        <activity
+            android:name=".AddTransactionActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.ExpenseTracker" />
 
     </application>
 </manifest>
