@@ -1,9 +1,11 @@
 package com.example.expense_tracker;
 
+import android.content.Intent; // Added for navigation
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,6 +20,7 @@ public class Main_Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // Hide Action Bar for a clean UI
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
@@ -34,6 +37,7 @@ public class Main_Activity extends AppCompatActivity {
                     .commit();
         }
 
+        // Bottom Navigation logic
         bottomNavigation.setOnItemSelectedListener(item -> {
             Fragment selectedFragment = null;
             int id = item.getItemId();
@@ -57,10 +61,10 @@ public class Main_Activity extends AppCompatActivity {
             return false;
         });
 
+        // FIXED: Now opens the Add Transaction Page Activity
         fabAdd.setOnClickListener(v -> {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, PlaceholderFragment.newInstance("Add Expense/Income Page"))
-                    .commit();
+            Intent intent = new Intent(Main_Activity.this, AddTransactionActivity.class);
+            startActivity(intent);
         });
     }
 
@@ -78,8 +82,6 @@ public class Main_Activity extends AppCompatActivity {
         @Nullable
         @Override
         public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            // Inflate the analysis layout. It now contains static list items,
-            // so we don't need the Spinner or dynamic update code anymore.
             return inflater.inflate(R.layout.fragment_analysis, container, false);
         }
     }
