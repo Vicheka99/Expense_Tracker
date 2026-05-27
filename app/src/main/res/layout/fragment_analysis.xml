@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_grey"
+    android:orientation="vertical">
+
+    <!-- Top Bar -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@android:drawable/ic_menu_revert"
+            android:layout_centerVertical="true"
+            app:tint="@android:color/black"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Overview"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_centerInParent="true"/>
+        <ImageView
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:src="@drawable/ic_notification"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            app:tint="@color/accent_orange"/>
+    </RelativeLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Summary Cards -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="8dp"
+                    app:cardBackgroundColor="@color/light_blue_card"
+                    app:cardCornerRadius="16dp"
+                    app:strokeWidth="0dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:orientation="vertical"
+                        android:gravity="center">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Total Income" android:textColor="@color/text_grey" android:textSize="12sp"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="$7,750.00" android:textColor="@color/chart_blue" android:textStyle="bold" android:textSize="18sp" android:layout_marginTop="4dp"/>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    app:cardBackgroundColor="@color/light_orange_card"
+                    app:cardCornerRadius="16dp"
+                    app:strokeWidth="0dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:orientation="vertical"
+                        android:gravity="center">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Total Expense" android:textColor="@color/text_grey" android:textSize="12sp"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="$4,390.00" android:textColor="@color/chart_orange" android:textStyle="bold" android:textSize="18sp" android:layout_marginTop="4dp"/>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+
+            <!-- Statistics Header -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="24dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Statistics"
+                    android:textColor="@android:color/black"
+                    android:textStyle="bold"
+                    android:textSize="18sp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Oct 01 - Oct 31"
+                    android:textColor="@color/text_grey"
+                    android:textSize="12sp"/>
+            </LinearLayout>
+
+            <!-- Bar Chart Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="@color/white">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:padding="20dp"
+                    android:orientation="horizontal">
+
+                    <!-- Y-Axis Labels -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:gravity="bottom"
+                        android:layout_marginBottom="24dp"
+                        android:paddingEnd="8dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="0dp" android:layout_weight="1" android:text="$5k" android:textSize="10sp"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="0dp" android:layout_weight="1" android:text="$4k" android:textSize="10sp"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="0dp" android:layout_weight="1" android:text="$3k" android:textSize="10sp"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="0dp" android:layout_weight="1" android:text="$2k" android:textSize="10sp"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="0dp" android:layout_weight="1" android:text="$1k" android:textSize="10sp"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="$0" android:textSize="10sp"/>
+                    </LinearLayout>
+
+                    <!-- Bars Container -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:orientation="horizontal"
+                            android:gravity="bottom"
+                            android:weightSum="4">
+
+                            <!-- W1 -->
+                            <LinearLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:gravity="bottom|center_horizontal" android:orientation="horizontal">
+                                <View android:layout_width="12dp" android:layout_height="180dp" android:background="@color/chart_blue" android:layout_marginEnd="2dp"/>
+                                <View android:layout_width="12dp" android:layout_height="120dp" android:background="@color/chart_orange"/>
+                            </LinearLayout>
+
+                            <!-- W2 -->
+                            <LinearLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:gravity="bottom|center_horizontal" android:orientation="horizontal">
+                                <View android:layout_width="12dp" android:layout_height="100dp" android:background="@color/chart_blue" android:layout_marginEnd="2dp"/>
+                                <View android:layout_width="12dp" android:layout_height="90dp" android:background="@color/chart_orange"/>
+                            </LinearLayout>
+
+                            <!-- W3 -->
+                            <LinearLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:gravity="bottom|center_horizontal" android:orientation="horizontal">
+                                <View android:layout_width="12dp" android:layout_height="140dp" android:background="@color/chart_blue" android:layout_marginEnd="2dp"/>
+                                <View android:layout_width="12dp" android:layout_height="105dp" android:background="@color/chart_orange"/>
+                            </LinearLayout>
+
+                            <!-- W4 -->
+                            <LinearLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:gravity="bottom|center_horizontal" android:orientation="horizontal">
+                                <View android:layout_width="12dp" android:layout_height="85dp" android:background="@color/chart_blue" android:layout_marginEnd="2dp"/>
+                                <View android:layout_width="12dp" android:layout_height="70dp" android:background="@color/chart_orange"/>
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <!-- X-Axis Labels -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginTop="8dp"
+                            android:weightSum="4">
+                            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="W1" android:gravity="center" android:textSize="10sp"/>
+                            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="W2" android:gravity="center" android:textSize="10sp"/>
+                            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="W3" android:gravity="center" android:textSize="10sp"/>
+                            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="W4" android:gravity="center" android:textSize="10sp"/>
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Weekly Comparison"
+                android:textColor="@android:color/black"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:layout_marginTop="24dp"/>
+
+            <!-- Week List Section -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="12dp">
+
+                <!-- Week 1 -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent" android:layout_height="wrap_content"
+                    app:cardCornerRadius="16dp" app:cardElevation="0dp" app:cardBackgroundColor="@color/white" android:layout_marginBottom="8dp">
+                    <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="16dp">
+                        <TextView android:id="@+id/w1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Week 1" android:textStyle="bold" android:textColor="@android:color/black"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="+$4,300" android:textColor="@color/income_green" android:layout_alignParentEnd="true" android:textStyle="bold"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="-$2,900" android:textColor="@color/expense_red" android:layout_alignParentEnd="true" android:layout_below="@id/w1" android:layout_marginTop="4dp" android:textSize="12sp"/>
+                    </RelativeLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Week 2 -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent" android:layout_height="wrap_content"
+                    app:cardCornerRadius="16dp" app:cardElevation="0dp" app:cardBackgroundColor="@color/white" android:layout_marginBottom="8dp">
+                    <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="16dp">
+                        <TextView android:id="@+id/w2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Week 2" android:textStyle="bold" android:textColor="@android:color/black"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="+$2,600" android:textColor="@color/income_green" android:layout_alignParentEnd="true" android:textStyle="bold"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="-$2,400" android:textColor="@color/expense_red" android:layout_alignParentEnd="true" android:layout_below="@id/w2" android:layout_marginTop="4dp" android:textSize="12sp"/>
+                    </RelativeLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Week 3 -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent" android:layout_height="wrap_content"
+                    app:cardCornerRadius="16dp" app:cardElevation="0dp" app:cardBackgroundColor="@color/white" android:layout_marginBottom="8dp">
+                    <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="16dp">
+                        <TextView android:id="@+id/w3" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Week 3" android:textStyle="bold" android:textColor="@android:color/black"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="+$3,500" android:textColor="@color/income_green" android:layout_alignParentEnd="true" android:textStyle="bold"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="-$2,700" android:textColor="@color/expense_red" android:layout_alignParentEnd="true" android:layout_below="@id/w3" android:layout_marginTop="4dp" android:textSize="12sp"/>
+                    </RelativeLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Week 4 -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent" android:layout_height="wrap_content"
+                    app:cardCornerRadius="16dp" app:cardElevation="0dp" app:cardBackgroundColor="@color/white" android:layout_marginBottom="8dp">
+                    <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="16dp">
+                        <TextView android:id="@+id/w4" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Week 4" android:textStyle="bold" android:textColor="@android:color/black"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="+$2,200" android:textColor="@color/income_green" android:layout_alignParentEnd="true" android:textStyle="bold"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="-$1,900" android:textColor="@color/expense_red" android:layout_alignParentEnd="true" android:layout_below="@id/w4" android:layout_marginTop="4dp" android:textSize="12sp"/>
+                    </RelativeLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>

@@ -8,11 +8,14 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="navy_dark">#1E1E2C</color>
+    <color name="main_blue">#6D7ED3</color>
     <color name="accent_orange">#D37D5D</color>
     <color name="text_grey">#A0A0A0</color>
     <color name="income_green">#66BB6A</color>
     <color name="expense_red">#EF5350</color>
     <color name="background_grey">#F5F5F5</color>
-
-    <!-- <color name="white">#FFFFFF</color> -->
+    <color name="light_blue_card">#EDF1FF</color>
+    <color name="light_orange_card">#FDEEE9</color>
+    <color name="chart_blue">#5C6BC0</color>
+    <color name="chart_orange">#FF7043</color>
 </resources>
