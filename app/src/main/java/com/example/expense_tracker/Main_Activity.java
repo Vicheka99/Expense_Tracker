@@ -1,6 +1,6 @@
 package com.example.expense_tracker;
 
-import android.content.Intent; // Added for navigation
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +20,6 @@ public class Main_Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Hide Action Bar for a clean UI
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
@@ -30,14 +29,12 @@ public class Main_Activity extends AppCompatActivity {
         BottomNavigationView bottomNavigation = findViewById(R.id.bottomNavigation);
         FloatingActionButton fabAdd = findViewById(R.id.fabAdd);
 
-        // Set Default Fragment (Home)
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, new HomeFragment())
                     .commit();
         }
 
-        // Bottom Navigation logic
         bottomNavigation.setOnItemSelectedListener(item -> {
             Fragment selectedFragment = null;
             int id = item.getItemId();
@@ -47,7 +44,8 @@ public class Main_Activity extends AppCompatActivity {
             } else if (id == R.id.nav_analysis) {
                 selectedFragment = new AnalysisFragment();
             } else if (id == R.id.nav_wallet) {
-                selectedFragment = PlaceholderFragment.newInstance("Wallet Page");
+                // CHANGED: Now uses your custom BudgetFragment layout
+                selectedFragment = new BudgetFragment();
             } else if (id == R.id.nav_profile) {
                 selectedFragment = PlaceholderFragment.newInstance("Profile Page");
             }
@@ -61,7 +59,6 @@ public class Main_Activity extends AppCompatActivity {
             return false;
         });
 
-        // FIXED: Now opens the Add Transaction Page Activity
         fabAdd.setOnClickListener(v -> {
             Intent intent = new Intent(Main_Activity.this, AddTransactionActivity.class);
             startActivity(intent);
@@ -77,6 +74,16 @@ public class Main_Activity extends AppCompatActivity {
         }
     }
 
+    // Budget Fragment Class (Spending Limits)
+    public static class BudgetFragment extends Fragment {
+        @Nullable
+        @Override
+        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+            // This now successfully links to your spending limit layout
+            return inflater.inflate(R.layout.fragment_budget, container, false);
+        }
+    }
+
     // Analysis Fragment Class
     public static class AnalysisFragment extends Fragment {
         @Nullable
@@ -86,7 +93,6 @@ public class Main_Activity extends AppCompatActivity {
         }
     }
 
-    // Placeholder Fragment Class for other pages
     public static class PlaceholderFragment extends Fragment {
         private static final String ARG_TITLE = "title";
 
@@ -97,6 +103,7 @@ public class Main_Activity extends AppCompatActivity {
             fragment.setArguments(args);
             return fragment;
         }
+
 
         @Nullable
         @Override
