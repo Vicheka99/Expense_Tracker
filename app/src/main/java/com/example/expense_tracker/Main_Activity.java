@@ -47,7 +47,7 @@ public class Main_Activity extends AppCompatActivity {
                 // CHANGED: Now uses your custom BudgetFragment layout
                 selectedFragment = new BudgetFragment();
             } else if (id == R.id.nav_profile) {
-                selectedFragment = PlaceholderFragment.newInstance("Profile Page");
+                selectedFragment = new PlaceholderFragment.ProfileFragment();
             }
 
             if (selectedFragment != null) {
@@ -103,7 +103,13 @@ public class Main_Activity extends AppCompatActivity {
             fragment.setArguments(args);
             return fragment;
         }
-
+        public static class ProfileFragment extends Fragment {
+            @Nullable
+            @Override
+            public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+                return inflater.inflate(R.layout.fragment_profile, container, false);
+            }
+        }
 
         @Nullable
         @Override
