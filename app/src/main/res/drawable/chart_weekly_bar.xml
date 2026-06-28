@@ -1,0 +1,47 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="320dp"
+    android:height="150dp"
+    android:viewportWidth="320"
+    android:viewportHeight="150">
+
+    <!-- Week 1 (x=30 to 70) -->
+    <!-- Background / Cap -->
+    <path
+        android:pathData="M 30,70 A 10,10 0 0,1 40,60 L 60,60 A 10,10 0 0,1 70,70 L 70,130 L 30,130 Z"
+        android:fillColor="#D0DFE8" />
+    <!-- Dark Blue Spending Fill -->
+    <path
+        android:pathData="M 30,90 A 10,10 0 0,1 40,80 L 60,80 A 10,10 0 0,1 70,90 L 70,130 L 30,130 Z"
+        android:fillColor="@color/dark_blue" />
+
+    <!-- Week 2 (x=100 to 140) -->
+    <!-- Background / Cap -->
+    <path
+        android:pathData="M 100,50 A 10,10 0 0,1 110,40 L 130,40 A 10,10 0 0,1 140,50 L 140,130 L 100,130 Z"
+        android:fillColor="#D0DFE8" />
+    <!-- Dark Blue Spending Fill -->
+    <path
+        android:pathData="M 100,75 A 10,10 0 0,1 110,65 L 130,65 A 10,10 0 0,1 140,75 L 140,130 L 100,130 Z"
+        android:fillColor="@color/dark_blue" />
+
+    <!-- Week 3 (x=170 to 210) -->
+    <!-- Background / Cap -->
+    <path
+        android:pathData="M 170,30 A 10,10 0 0,1 180,20 L 200,20 A 10,10 0 0,1 210,30 L 210,130 L 170,130 Z"
+        android:fillColor="#D0DFE8" />
+    <!-- Dark Blue Spending Fill -->
+    <path
+        android:pathData="M 170,40 A 10,10 0 0,1 180,30 L 200,30 A 10,10 0 0,1 210,40 L 210,130 L 170,130 Z"
+        android:fillColor="@color/dark_blue" />
+
+    <!-- Week 4 (x=240 to 280) -->
+    <!-- Background / Cap -->
+    <path
+        android:pathData="M 240,60 A 10,10 0 0,1 250,50 L 270,50 A 10,10 0 0,1 280,60 L 280,130 L 240,130 Z"
+        android:fillColor="#D0DFE8" />
+    <!-- Dark Blue Spending Fill -->
+    <path
+        android:pathData="M 240,85 A 10,10 0 0,1 250,75 L 270,75 A 10,10 0 0,1 280,85 L 280,130 L 240,130 Z"
+        android:fillColor="@color/dark_blue" />
+
+</vector>

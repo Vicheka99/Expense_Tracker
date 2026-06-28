@@ -35,6 +35,13 @@ dependencies {
 
     implementation(libs.appcompat)
     implementation(libs.material)
+    
+    // Auth & Network dependencies
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.play.services.auth)
+    implementation(libs.googleid)
+    implementation(libs.okhttp)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

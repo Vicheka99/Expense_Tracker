@@ -1,22 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="navy_dark">#1E1E2C</color>
-    <color name="main_blue">#6D7ED3</color>
-    <color name="accent_orange">#D37D5D</color>
-    <color name="text_grey">#A0A0A0</color>
-    <color name="income_green">#66BB6A</color>
-    <color name="expense_red">#EF5350</color>
-    <color name="background_grey">#F5F5F5</color>
-    <color name="light_blue_card">#EDF1FF</color>
-    <color name="light_orange_card">#FDEEE9</color>
-    <color name="chart_blue">#5C6BC0</color>
-    <color name="chart_orange">#FF7043</color>
 
+    <!-- Project Theme Colors from agent.md -->
+    <color name="primary_blue">#4A90E2</color>
+    <color name="secondary_blue">#7FB3FF</color>
+    <color name="accent_blue">#00C2FF</color>
+    <color name="color_success">#4CAF50</color>
+    <color name="color_warning">#FFB300</color>
+    <color name="color_danger">#F44336</color>
+    <color name="background_grey">#F5F8FC</color>
+    <color name="text_main">#2D3142</color>
+    <color name="text_secondary">#9DA3B4</color>
+
+    <!-- Specific chart and accent colors from screenshot -->
+    <color name="dark_blue">#0A5296</color>
+    <color name="pink_expense">#E8A2A9</color>
+    <color name="orange_accent">#E67E22</color>
+    <color name="accent_orange">#E67E22</color>
+    <color name="light_orange">#FFF3E0</color>
+    <color name="light_blue_bg">#EBF3FC</color>
+    <color name="light_blue_icon_bg">#E3F2FD</color>
+    <color name="donut_food">#805C04</color>
+    <color name="donut_rent">#7FB3FF</color>
+    <color name="donut_other">#8B5A2B</color>
 </resources>

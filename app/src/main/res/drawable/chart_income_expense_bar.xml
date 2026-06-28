@@ -1,0 +1,37 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="320dp"
+    android:height="150dp"
+    android:viewportWidth="320"
+    android:viewportHeight="150">
+
+    <!-- September (Center x=60) -->
+    <!-- Income (Blue) -->
+    <path
+        android:pathData="M 42,46 A 6,6 0 0,1 48,40 L 52,40 A 6,6 0 0,1 58,46 L 58,130 L 42,130 Z"
+        android:fillColor="@color/dark_blue" />
+    <!-- Expense (Pink) -->
+    <path
+        android:pathData="M 62,96 A 6,6 0 0,1 68,90 L 72,90 A 6,6 0 0,1 78,96 L 78,130 L 62,130 Z"
+        android:fillColor="@color/pink_expense" />
+
+    <!-- October (Center x=160) -->
+    <!-- Income (Blue) -->
+    <path
+        android:pathData="M 142,56 A 6,6 0 0,1 148,50 L 152,50 A 6,6 0 0,1 158,56 L 158,130 L 142,130 Z"
+        android:fillColor="@color/dark_blue" />
+    <!-- Expense (Pink) -->
+    <path
+        android:pathData="M 162,86 A 6,6 0 0,1 168,80 L 172,80 A 6,6 0 0,1 178,86 L 178,130 L 162,130 Z"
+        android:fillColor="@color/pink_expense" />
+
+    <!-- November (Center x=260) -->
+    <!-- Income (Blue) -->
+    <path
+        android:pathData="M 242,36 A 6,6 0 0,1 248,30 L 252,30 A 6,6 0 0,1 258,36 L 258,130 L 242,130 Z"
+        android:fillColor="@color/dark_blue" />
+    <!-- Expense (Pink) -->
+    <path
+        android:pathData="M 262,101 A 6,6 0 0,1 268,95 L 272,95 A 6,6 0 0,1 278,101 L 278,130 L 262,130 Z"
+        android:fillColor="@color/pink_expense" />
+
+</vector>

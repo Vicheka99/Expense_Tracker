@@ -1,0 +1,73 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="320dp"
+    android:height="150dp"
+    android:viewportWidth="320"
+    android:viewportHeight="150">
+
+    <!-- Horizontal baseline -->
+    <path
+        android:pathData="M 10,135 L 310,135"
+        android:strokeColor="#F0F4F8"
+        android:strokeWidth="1" />
+
+    <!-- Vertical grid lines for each day -->
+    <!-- Mon (25), Tue (70), Wed (115), Thu (160), Fri (205), Sat (250), Sun (295) -->
+    <path
+        android:pathData="M 25,20 L 25,135 M 70,20 L 70,135 M 115,20 L 115,135 M 160,20 L 160,135 M 205,20 L 205,135 M 250,20 L 250,135 M 295,20 L 295,135"
+        android:strokeColor="#F0F4F8"
+        android:strokeWidth="1.2" />
+
+    <!-- Gradient Fill under the curve -->
+    <path
+        android:pathData="M 25,110 C 50,110 55,105 70,105 C 90,105 105,90 115,80 C 130,65 145,55 160,55 C 180,55 190,75 205,85 C 220,95 235,100 250,95 C 270,90 285,65 295,45 L 295,135 L 25,135 Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="160"
+                android:startY="45"
+                android:endX="160"
+                android:endY="135"
+                android:type="linear">
+                <item android:offset="0.0" android:color="#404A90E2" />
+                <item android:offset="1.0" android:color="#004A90E2" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <!-- Main Bézier curve line -->
+    <path
+        android:pathData="M 25,110 C 50,110 55,105 70,105 C 90,105 105,90 115,80 C 130,65 145,55 160,55 C 180,55 190,75 205,85 C 220,95 235,100 250,95 C 270,90 285,65 295,45"
+        android:strokeColor="#4A90E2"
+        android:strokeWidth="3.5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+
+    <!-- Highlight circle markers on Wed, Thu, Sun -->
+    <!-- Wednesday (115, 80) -->
+    <group>
+        <path
+            android:pathData="M 115,80 m -4,0 a 4,4 0 1,0 8,0 a 4,4 0 1,0 -8,0"
+            android:fillColor="#4A90E2"
+            android:strokeColor="#FFFFFF"
+            android:strokeWidth="1.5" />
+    </group>
+
+    <!-- Thursday (160, 55) -->
+    <group>
+        <path
+            android:pathData="M 160,55 m -4,0 a 4,4 0 1,0 8,0 a 4,4 0 1,0 -8,0"
+            android:fillColor="#4A90E2"
+            android:strokeColor="#FFFFFF"
+            android:strokeWidth="1.5" />
+    </group>
+
+    <!-- Sunday (295, 45) -->
+    <group>
+        <path
+            android:pathData="M 295,45 m -4,0 a 4,4 0 1,0 8,0 a 4,4 0 1,0 -8,0"
+            android:fillColor="#4A90E2"
+            android:strokeColor="#FFFFFF"
+            android:strokeWidth="1.5" />
+    </group>
+
+</vector>

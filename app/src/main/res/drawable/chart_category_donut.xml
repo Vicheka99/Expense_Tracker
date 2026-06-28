@@ -1,0 +1,28 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="120dp"
+    android:height="120dp"
+    android:viewportWidth="100"
+    android:viewportHeight="100">
+
+    <!-- Food: 65% starting from top (50, 15) to (21.7, 70.6) -->
+    <path
+        android:pathData="M 50,15 A 35,35 0 1,1 21.7,70.6"
+        android:strokeColor="@color/donut_food"
+        android:strokeWidth="14"
+        android:fillColor="#00000000" />
+
+    <!-- Rent: 20% from (21.7, 70.6) to (21.7, 29.4) -->
+    <path
+        android:pathData="M 21.7,70.6 A 35,35 0 0,1 21.7,29.4"
+        android:strokeColor="@color/donut_rent"
+        android:strokeWidth="14"
+        android:fillColor="#00000000" />
+
+    <!-- Other: 15% from (21.7, 29.4) to (50, 15) -->
+    <path
+        android:pathData="M 21.7,29.4 A 35,35 0 0,1 50,15"
+        android:strokeColor="@color/donut_other"
+        android:strokeWidth="14"
+        android:fillColor="#00000000" />
+
+</vector>

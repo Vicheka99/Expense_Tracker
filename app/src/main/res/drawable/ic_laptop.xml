@@ -1,0 +1,26 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <!-- Laptop screen outline -->
+    <path
+        android:fillColor="#D0D5DD"
+        android:pathData="M8,12 h32 v20 h-32 z" />
+    <!-- Inner screen -->
+    <path
+        android:fillColor="#0A5296"
+        android:pathData="M10,14 h28 v16 h-28 z" />
+    <!-- Screen highlight reflection -->
+    <path
+        android:fillColor="#30FFFFFF"
+        android:pathData="M24,14 L38,28 L38,14 Z" />
+    <!-- Laptop base -->
+    <path
+        android:fillColor="#9DA3B4"
+        android:pathData="M4,32 h40 v2 a2,2 0 0,1 -2,2 h-36 a2,2 0 0,1 -2,-2 z" />
+    <!-- Base cutout -->
+    <path
+        android:fillColor="#667085"
+        android:pathData="M20,32 h8 v2 h-8 z" />
+</vector>

@@ -6,7 +6,7 @@
         android:title="Home" />
     <item
         android:id="@+id/nav_analysis"
-        android:icon="@drawable/ic_analysis"
+        android:icon="@drawable/item_analysis_category"
         android:title="Analysis" />
     <!-- Placeholder for the center FAB -->
     <item
@@ -19,6 +19,6 @@
         android:title="Wallet" />
     <item
         android:id="@+id/nav_profile"
-        android:icon="@drawable/ic_profile"
+        android:icon="@drawable/ic_profile_placeholder"
         android:title="Profile" />
 </menu>

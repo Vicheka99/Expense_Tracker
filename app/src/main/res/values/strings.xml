@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Expense-Tracker</string>
+
+    <!-- Supabase Configuration Placeholders -->
+    <string name="supabase_url">https://tyjekknndnmqxymgzzlz.supabase.co/rest/v1/</string>
+    <string name="supabase_anon_key">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR5amVra25uZG5tcXh5bWd6emx6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0NTc5NjQsImV4cCI6MjA5ODAzMzk2NH0.hSlD4d943sJ2SgZ-seyJvjXwKUSaI9o0gVYpGr1kSlE</string>
+
+    <!-- Google Web Client ID Placeholder -->
+    <string name="google_web_client_id">603843206381-mpngl5vtrhnt1jf4efihkttcd5autc00.apps.googleusercontent.com</string>
 </resources>
