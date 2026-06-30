@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="20dp"
+    android:scrollbars="none">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Category Dropdown -->
+        <TextView
+            android:id="@+id/tvLabelCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Select Category"
+            android:textColor="#9DA3B4"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="6dp" />
+
+        <Spinner
+            android:id="@+id/spCbCategory"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/bg_form_input"
+            android:layout_marginBottom="16dp"
+            android:paddingHorizontal="12dp" />
+
+        <!-- Budget Limit -->
+        <TextView
+            android:id="@+id/tvLabelLimit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Budget Limit ($)"
+            android:textColor="#9DA3B4"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="6dp" />
+
+        <EditText
+            android:id="@+id/etCbLimit"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:hint="0.00"
+            android:textColor="#1A1C24"
+            android:textSize="14sp"
+            android:paddingHorizontal="12dp"
+            android:background="@drawable/bg_form_input"
+            android:layout_marginBottom="8dp"
+            android:inputType="numberDecimal"
+            android:singleLine="true" />
+
+    </LinearLayout>
+</ScrollView>

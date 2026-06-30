@@ -232,4 +232,73 @@ public class SupabaseAuthManager {
             }
         });
     }
+
+    public interface FetchTransactionsCallback {
+        void onSuccess(java.util.List<DatabaseHelper.Transaction> transactions);
+        void onFailure(String errorMessage);
+    }
+
+    public void fetchTransactionsFromServer(final FetchTransactionsCallback callback) {
+        String token = prefs.getString(KEY_ACCESS_TOKEN, null);
+        String email = prefs.getString(KEY_USER_EMAIL, "guest");
+        if (token == null) {
+            callback.onFailure("User is not logged in");
+            return;
+        }
+
+        String url = supabaseUrl + "/rest/v1/transactions?user_email=eq." + email;
+
+        Request request = new Request.Builder()
+                .url(url)
+                .get()
+                .addHeader("apikey", supabaseAnonKey)
+                .addHeader("Authorization", "Bearer " + token)
+                .addHeader("Content-Type", "application/json")
+                .build();
+
+        httpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                mainHandler.post(() -> callback.onFailure("Network error: " + e.getMessage()));
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                try (Response r = response) {
+                    String responseBody = r.body() != null ? r.body().string() : "";
+                    if (!response.isSuccessful()) {
+                        mainHandler.post(() -> callback.onFailure("Failed to fetch: status " + response.code() + " " + responseBody));
+                        return;
+                    }
+
+                    try {
+                        org.json.JSONArray jsonArray = new org.json.JSONArray(responseBody);
+                        final java.util.List<DatabaseHelper.Transaction> list = new java.util.ArrayList<>();
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject obj = jsonArray.getJSONObject(i);
+                            String id = obj.getString("id");
+                            String userEmail = obj.getString("user_email");
+                            String type = obj.getString("type");
+                            double amount = obj.getDouble("amount");
+                            String category = obj.getString("category");
+                            String date = obj.getString("date");
+                            String note = obj.optString("note", "");
+                            String receiptImage = obj.optString("receipt_image", null);
+                            if ("null".equals(receiptImage)) {
+                                receiptImage = null;
+                            }
+                            
+                            DatabaseHelper.Transaction tx = new DatabaseHelper.Transaction(
+                                    id, userEmail, type, amount, category, date, note, receiptImage, 1
+                            );
+                            list.add(tx);
+                        }
+                        mainHandler.post(() -> callback.onSuccess(list));
+                    } catch (JSONException e) {
+                        mainHandler.post(() -> callback.onFailure("Parsing error: " + e.getMessage()));
+                    }
+                }
+            }
+        });
+    }
 }

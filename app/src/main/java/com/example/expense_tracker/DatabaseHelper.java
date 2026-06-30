@@ -13,7 +13,7 @@ import java.util.Map;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "expense_tracker.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 4;
 
     public static final String TABLE_TRANSACTIONS = "transactions";
     public static final String COL_ID = "id";
@@ -26,6 +26,30 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_RECEIPT_IMAGE = "receipt_image"; // Base64 thumbnail string
     public static final String COL_SYNCED = "synced"; // 0 for false, 1 for true
     public static final String COL_CREATED_AT = "created_at";
+
+    // Saving Goals Table & Columns
+    public static final String TABLE_SAVING_GOALS = "saving_goals";
+    public static final String COL_GOAL_ID = "id";
+    public static final String COL_GOAL_USER_EMAIL = "user_email";
+    public static final String COL_GOAL_NAME = "name";
+    public static final String COL_GOAL_TARGET = "target_amount";
+    public static final String COL_GOAL_CURRENT = "current_amount";
+
+    // Recurring Payments Table & Columns
+    public static final String TABLE_RECURRING = "recurring_payments";
+    public static final String COL_REC_ID = "id";
+    public static final String COL_REC_USER_EMAIL = "user_email";
+    public static final String COL_REC_NAME = "name";
+    public static final String COL_REC_AMOUNT = "amount";
+    public static final String COL_REC_FREQUENCY = "frequency";
+    public static final String COL_REC_DUE_DATE = "due_date";
+
+    // Category Budgets Table & Columns
+    public static final String TABLE_CAT_BUDGETS = "category_budgets";
+    public static final String COL_CB_ID = "id";
+    public static final String COL_CB_USER_EMAIL = "user_email";
+    public static final String COL_CB_CATEGORY = "category";
+    public static final String COL_CB_LIMIT = "budget_limit";
 
     private static DatabaseHelper instance;
 
@@ -42,7 +66,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String createTableQuery = "CREATE TABLE " + TABLE_TRANSACTIONS + " (" +
+        String createTransactionsTable = "CREATE TABLE " + TABLE_TRANSACTIONS + " (" +
                 COL_ID + " TEXT PRIMARY KEY, " +
                 COL_USER_EMAIL + " TEXT, " +
                 COL_TYPE + " TEXT, " +
@@ -53,12 +77,49 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COL_RECEIPT_IMAGE + " TEXT, " +
                 COL_SYNCED + " INTEGER DEFAULT 0, " +
                 COL_CREATED_AT + " TEXT DEFAULT CURRENT_TIMESTAMP)";
-        db.execSQL(createTableQuery);
+        db.execSQL(createTransactionsTable);
+
+        String createGoalsTable = "CREATE TABLE " + TABLE_SAVING_GOALS + " (" +
+                COL_GOAL_ID + " TEXT PRIMARY KEY, " +
+                COL_GOAL_USER_EMAIL + " TEXT, " +
+                COL_GOAL_NAME + " TEXT, " +
+                COL_GOAL_TARGET + " REAL, " +
+                COL_GOAL_CURRENT + " REAL)";
+        db.execSQL(createGoalsTable);
+
+        String createRecurringTable = "CREATE TABLE " + TABLE_RECURRING + " (" +
+                COL_REC_ID + " TEXT PRIMARY KEY, " +
+                COL_REC_USER_EMAIL + " TEXT, " +
+                COL_REC_NAME + " TEXT, " +
+                COL_REC_AMOUNT + " REAL, " +
+                COL_REC_FREQUENCY + " TEXT, " +
+                COL_REC_DUE_DATE + " TEXT)";
+        db.execSQL(createRecurringTable);
+
+        String createCatBudgetsTable = "CREATE TABLE " + TABLE_CAT_BUDGETS + " (" +
+                COL_CB_ID + " TEXT PRIMARY KEY, " +
+                COL_CB_USER_EMAIL + " TEXT, " +
+                COL_CB_CATEGORY + " TEXT, " +
+                COL_CB_LIMIT + " REAL)";
+        db.execSQL(createCatBudgetsTable);
+
+        // Create indices on queried fields (user_email and date) for rapid querying
+        db.execSQL("CREATE INDEX IF NOT EXISTS idx_transactions_user_date ON " + TABLE_TRANSACTIONS + 
+                   " (" + COL_USER_EMAIL + ", " + COL_DATE + ")");
+        db.execSQL("CREATE INDEX IF NOT EXISTS idx_goals_user ON " + TABLE_SAVING_GOALS + 
+                   " (" + COL_GOAL_USER_EMAIL + ")");
+        db.execSQL("CREATE INDEX IF NOT EXISTS idx_rec_user ON " + TABLE_RECURRING + 
+                   " (" + COL_REC_USER_EMAIL + ")");
+        db.execSQL("CREATE INDEX IF NOT EXISTS idx_cb_user ON " + TABLE_CAT_BUDGETS + 
+                   " (" + COL_CB_USER_EMAIL + ")");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRANSACTIONS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_SAVING_GOALS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_RECURRING);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CAT_BUDGETS);
         onCreate(db);
     }
 
@@ -249,5 +310,212 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             cursor.close();
         }
         return breakdown;
+    }
+
+    // --- SAVING GOALS MODEL & CRUD ---
+    public static class SavingGoal {
+        public String id;
+        public String userEmail;
+        public String name;
+        public double targetAmount;
+        public double currentAmount;
+
+        public SavingGoal() {}
+        public SavingGoal(String id, String userEmail, String name, double targetAmount, double currentAmount) {
+            this.id = id;
+            this.userEmail = userEmail;
+            this.name = name;
+            this.targetAmount = targetAmount;
+            this.currentAmount = currentAmount;
+        }
+    }
+
+    public boolean insertSavingGoal(SavingGoal goal) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(COL_GOAL_ID, goal.id);
+        cv.put(COL_GOAL_USER_EMAIL, goal.userEmail);
+        cv.put(COL_GOAL_NAME, goal.name);
+        cv.put(COL_GOAL_TARGET, goal.targetAmount);
+        cv.put(COL_GOAL_CURRENT, goal.currentAmount);
+        long result = db.insert(TABLE_SAVING_GOALS, null, cv);
+        return result != -1;
+    }
+
+    public boolean updateSavingGoal(SavingGoal goal) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(COL_GOAL_NAME, goal.name);
+        cv.put(COL_GOAL_TARGET, goal.targetAmount);
+        cv.put(COL_GOAL_CURRENT, goal.currentAmount);
+        int result = db.update(TABLE_SAVING_GOALS, cv, COL_GOAL_ID + "=?", new String[]{goal.id});
+        return result > 0;
+    }
+
+    public boolean deleteSavingGoal(String id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        int result = db.delete(TABLE_SAVING_GOALS, COL_GOAL_ID + "=?", new String[]{id});
+        return result > 0;
+    }
+
+    public List<SavingGoal> getSavingGoals(String userEmail) {
+        List<SavingGoal> list = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(TABLE_SAVING_GOALS, null, COL_GOAL_USER_EMAIL + "=?", new String[]{userEmail}, null, null, null);
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                SavingGoal g = new SavingGoal();
+                g.id = cursor.getString(cursor.getColumnIndexOrThrow(COL_GOAL_ID));
+                g.userEmail = cursor.getString(cursor.getColumnIndexOrThrow(COL_GOAL_USER_EMAIL));
+                g.name = cursor.getString(cursor.getColumnIndexOrThrow(COL_GOAL_NAME));
+                g.targetAmount = cursor.getDouble(cursor.getColumnIndexOrThrow(COL_GOAL_TARGET));
+                g.currentAmount = cursor.getDouble(cursor.getColumnIndexOrThrow(COL_GOAL_CURRENT));
+                list.add(g);
+            }
+            cursor.close();
+        }
+        return list;
+    }
+
+    // --- RECURRING PAYMENTS MODEL & CRUD ---
+    public static class RecurringPayment {
+        public String id;
+        public String userEmail;
+        public String name;
+        public double amount;
+        public String frequency;
+        public String dueDate;
+
+        public RecurringPayment() {}
+        public RecurringPayment(String id, String userEmail, String name, double amount, String frequency, String dueDate) {
+            this.id = id;
+            this.userEmail = userEmail;
+            this.name = name;
+            this.amount = amount;
+            this.frequency = frequency;
+            this.dueDate = dueDate;
+        }
+    }
+
+    public boolean insertRecurringPayment(RecurringPayment rec) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(COL_REC_ID, rec.id);
+        cv.put(COL_REC_USER_EMAIL, rec.userEmail);
+        cv.put(COL_REC_NAME, rec.name);
+        cv.put(COL_REC_AMOUNT, rec.amount);
+        cv.put(COL_REC_FREQUENCY, rec.frequency);
+        cv.put(COL_REC_DUE_DATE, rec.dueDate);
+        long result = db.insert(TABLE_RECURRING, null, cv);
+        return result != -1;
+    }
+
+    public boolean updateRecurringPayment(RecurringPayment rec) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(COL_REC_NAME, rec.name);
+        cv.put(COL_REC_AMOUNT, rec.amount);
+        cv.put(COL_REC_FREQUENCY, rec.frequency);
+        cv.put(COL_REC_DUE_DATE, rec.dueDate);
+        int result = db.update(TABLE_RECURRING, cv, COL_REC_ID + "=?", new String[]{rec.id});
+        return result > 0;
+    }
+
+    public boolean deleteRecurringPayment(String id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        int result = db.delete(TABLE_RECURRING, COL_REC_ID + "=?", new String[]{id});
+        return result > 0;
+    }
+
+    public List<RecurringPayment> getRecurringPayments(String userEmail) {
+        List<RecurringPayment> list = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(TABLE_RECURRING, null, COL_REC_USER_EMAIL + "=?", new String[]{userEmail}, null, null, null);
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                RecurringPayment r = new RecurringPayment();
+                r.id = cursor.getString(cursor.getColumnIndexOrThrow(COL_REC_ID));
+                r.userEmail = cursor.getString(cursor.getColumnIndexOrThrow(COL_REC_USER_EMAIL));
+                r.name = cursor.getString(cursor.getColumnIndexOrThrow(COL_REC_NAME));
+                r.amount = cursor.getDouble(cursor.getColumnIndexOrThrow(COL_REC_AMOUNT));
+                r.frequency = cursor.getString(cursor.getColumnIndexOrThrow(COL_REC_FREQUENCY));
+                r.dueDate = cursor.getString(cursor.getColumnIndexOrThrow(COL_REC_DUE_DATE));
+                list.add(r);
+            }
+            cursor.close();
+        }
+        return list;
+    }
+
+    // Category Budget Model Representation
+    public static class CategoryBudget {
+        public String id;
+        public String userEmail;
+        public String category;
+        public double budgetLimit;
+
+        public CategoryBudget() {}
+
+        public CategoryBudget(String id, String userEmail, String category, double budgetLimit) {
+            this.id = id;
+            this.userEmail = userEmail;
+            this.category = category;
+            this.budgetLimit = budgetLimit;
+        }
+    }
+
+    public boolean insertCategoryBudget(CategoryBudget cb) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(COL_CB_ID, cb.id);
+        cv.put(COL_CB_USER_EMAIL, cb.userEmail);
+        cv.put(COL_CB_CATEGORY, cb.category);
+        cv.put(COL_CB_LIMIT, cb.budgetLimit);
+        long result = db.insert(TABLE_CAT_BUDGETS, null, cv);
+        return result != -1;
+    }
+
+    public boolean updateCategoryBudget(CategoryBudget cb) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(COL_CB_CATEGORY, cb.category);
+        cv.put(COL_CB_LIMIT, cb.budgetLimit);
+        int result = db.update(TABLE_CAT_BUDGETS, cv, COL_CB_ID + "=?", new String[]{cb.id});
+        return result > 0;
+    }
+
+    public boolean deleteCategoryBudget(String id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        int result = db.delete(TABLE_CAT_BUDGETS, COL_CB_ID + "=?", new String[]{id});
+        return result > 0;
+    }
+
+    public List<CategoryBudget> getCategoryBudgets(String userEmail) {
+        List<CategoryBudget> list = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(TABLE_CAT_BUDGETS, null, COL_CB_USER_EMAIL + "=?", new String[]{userEmail}, null, null, null);
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                CategoryBudget cb = new CategoryBudget();
+                cb.id = cursor.getString(cursor.getColumnIndexOrThrow(COL_CB_ID));
+                cb.userEmail = cursor.getString(cursor.getColumnIndexOrThrow(COL_CB_USER_EMAIL));
+                cb.category = cursor.getString(cursor.getColumnIndexOrThrow(COL_CB_CATEGORY));
+                cb.budgetLimit = cursor.getDouble(cursor.getColumnIndexOrThrow(COL_CB_LIMIT));
+                list.add(cb);
+            }
+            cursor.close();
+        }
+        return list;
+    }
+
+    public boolean doesTransactionExist(String id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(TABLE_TRANSACTIONS, new String[]{COL_ID}, COL_ID + "=?", new String[]{id}, null, null, null);
+        boolean exists = false;
+        if (cursor != null) {
+            exists = cursor.getCount() > 0;
+            cursor.close();
+        }
+        return exists;
     }
 }

@@ -30,22 +30,22 @@
             android:weightSum="5">
 
             <FrameLayout android:id="@+id/nav_home" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1">
-                <ImageView android:layout_width="24dp" android:layout_height="24dp" android:layout_gravity="center" android:src="@android:drawable/ic_menu_today" app:tint="@color/text_main" />
+                <ImageView android:layout_width="24dp" android:layout_height="24dp" android:layout_gravity="center" android:src="@drawable/ic_home" app:tint="@color/text_main" />
             </FrameLayout>
 
             <FrameLayout android:id="@+id/nav_analysis" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1">
-                <ImageView android:layout_width="24dp" android:layout_height="24dp" android:layout_gravity="center" android:src="@android:drawable/ic_menu_sort_by_size" app:tint="@color/primary_blue" />
+                <ImageView android:layout_width="24dp" android:layout_height="24dp" android:layout_gravity="center" android:src="@drawable/ic_trend_prediction" app:tint="@color/text_main" />
             </FrameLayout>
 
             <!-- Middle space for FAB -->
             <View android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" />
 
             <FrameLayout android:id="@+id/nav_budget" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1">
-                <ImageView android:layout_width="24dp" android:layout_height="24dp" android:layout_gravity="center" android:src="@android:drawable/ic_menu_agenda" app:tint="@color/text_main" />
+                <ImageView android:layout_width="24dp" android:layout_height="24dp" android:layout_gravity="center" android:src="@drawable/ic_wallet" app:tint="@color/text_main" />
             </FrameLayout>
 
             <FrameLayout android:id="@+id/nav_profile" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1">
-                <ImageView android:layout_width="24dp" android:layout_height="24dp" android:layout_gravity="center" android:src="@android:drawable/ic_menu_myplaces" app:tint="@color/text_main" />
+                <ImageView android:layout_width="24dp" android:layout_height="24dp" android:layout_gravity="center" android:src="@drawable/ic_profile_placeholder" app:tint="@color/text_main" />
             </FrameLayout>
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
