@@ -32,13 +32,20 @@ import java.util.Map;
 
 public class Main_Activity extends AppCompatActivity {
 
+    public static android.content.SharedPreferences getPrefs(android.content.Context context) {
+        if (context == null) return null;
+        SupabaseAuthManager authManager = SupabaseAuthManager.getInstance(context);
+        String email = authManager.isLoggedIn() ? authManager.getUserEmail() : "guest";
+        return context.getSharedPreferences("ExpenseTrackerPrefs_" + email, android.content.Context.MODE_PRIVATE);
+    }
+
     public static String formatAmount(android.content.Context context, double amountInUSD) {
         return formatAmount(context, amountInUSD, false);
     }
 
     public static String formatAmount(android.content.Context context, double amountInUSD, boolean forceNoDecimal) {
         if (context == null) return String.format(Locale.US, forceNoDecimal ? "$%,.0f" : "$%,.2f", amountInUSD);
-        android.content.SharedPreferences prefs = context.getSharedPreferences("ExpenseTrackerPrefs", android.content.Context.MODE_PRIVATE);
+        android.content.SharedPreferences prefs = getPrefs(context);
         String currency = prefs.getString("selected_currency", "USD");
         if ("KHR".equals(currency)) {
             double rate = prefs.getFloat("exchange_rate", 4100.0f);
@@ -51,7 +58,7 @@ public class Main_Activity extends AppCompatActivity {
 
     public static void checkBudgetAndNotify(android.content.Context context) {
         if (context == null) return;
-        android.content.SharedPreferences prefs = context.getSharedPreferences("ExpenseTrackerPrefs", android.content.Context.MODE_PRIVATE);
+        android.content.SharedPreferences prefs = getPrefs(context);
         boolean notifEnabled = prefs.getBoolean("notif_enabled", true);
         if (!notifEnabled) return;
 
@@ -103,7 +110,7 @@ public class Main_Activity extends AppCompatActivity {
 
     public static void checkBillsAndNotify(android.content.Context context) {
         if (context == null) return;
-        android.content.SharedPreferences prefs = context.getSharedPreferences("ExpenseTrackerPrefs", android.content.Context.MODE_PRIVATE);
+        android.content.SharedPreferences prefs = getPrefs(context);
         boolean remindersEnabled = prefs.getBoolean("bill_reminders_enabled", true);
         if (!remindersEnabled) return;
 
@@ -196,7 +203,7 @@ public class Main_Activity extends AppCompatActivity {
 
     public void updateNotificationBadge(View rootView) {
         if (rootView == null) return;
-        android.content.SharedPreferences prefs = getSharedPreferences("ExpenseTrackerPrefs", android.content.Context.MODE_PRIVATE);
+        android.content.SharedPreferences prefs = getPrefs(this);
         DatabaseHelper dbHelper = DatabaseHelper.getInstance(this);
         SupabaseAuthManager authManager = SupabaseAuthManager.getInstance(this);
         String email = authManager.isLoggedIn() ? authManager.getUserEmail() : "guest";
@@ -227,7 +234,7 @@ public class Main_Activity extends AppCompatActivity {
         TextView tvCount = rootView.findViewById(R.id.tvNotificationCount);
         
         if (badgeCard != null && tvCount != null) {
-            if (grandTotal > 0 && grandTotal != lastSeenCount) {
+            if (grandTotal >= 2 && grandTotal != lastSeenCount) {
                 tvCount.setText(String.valueOf(grandTotal));
                 badgeCard.setVisibility(View.VISIBLE);
             } else {
@@ -255,7 +262,7 @@ public class Main_Activity extends AppCompatActivity {
     }
 
     public void showNotificationsDialog() {
-        android.content.SharedPreferences prefs = getSharedPreferences("ExpenseTrackerPrefs", android.content.Context.MODE_PRIVATE);
+        android.content.SharedPreferences prefs = getPrefs(this);
         String lang = prefs.getString("selected_language", "EN");
         boolean isKhmer = "KH".equals(lang);
 
@@ -318,11 +325,7 @@ public class Main_Activity extends AppCompatActivity {
         android.widget.ScrollView scrollView = new android.widget.ScrollView(this);
         scrollView.setVerticalScrollBarEnabled(false);
         scrollView.setOverScrollMode(android.view.View.OVER_SCROLL_NEVER);
-
-        android.graphics.drawable.GradientDrawable dialogBg = new android.graphics.drawable.GradientDrawable();
-        dialogBg.setColor(0xFFF5F8FC);
-        dialogBg.setCornerRadius(20 * d);
-        scrollView.setBackground(dialogBg);
+        scrollView.setBackgroundColor(0xFFF5F8FC);
 
         LinearLayout root = new LinearLayout(this);
         root.setOrientation(LinearLayout.VERTICAL);
@@ -334,11 +337,10 @@ public class Main_Activity extends AppCompatActivity {
             android.graphics.drawable.GradientDrawable.Orientation.LEFT_RIGHT,
             new int[]{ 0xFF0D47A1, 0xFF1565C0 }
         );
-        headerBg.setCornerRadii(new float[]{ 20*d, 20*d, 20*d, 20*d, 0, 0, 0, 0 }); // round top corners matching dialog shape
 
         LinearLayout header = new LinearLayout(this);
         header.setOrientation(LinearLayout.VERTICAL);
-        header.setPadding(p16, (int)(22*d), p16, (int)(18*d));
+        header.setPadding(p16, (int)(36*d), p16, (int)(18*d));
         header.setBackground(headerBg);
 
         // Top row: bell + title + badge
@@ -346,13 +348,15 @@ public class Main_Activity extends AppCompatActivity {
         hTop.setOrientation(LinearLayout.HORIZONTAL);
         hTop.setGravity(Gravity.CENTER_VERTICAL);
 
-        ImageView bellIv = new ImageView(this);
-        LinearLayout.LayoutParams bellP = new LinearLayout.LayoutParams((int)(24*d),(int)(24*d));
-        bellP.rightMargin = (int)(10*d);
-        bellIv.setLayoutParams(bellP);
-        bellIv.setImageResource(R.drawable.ic_notification);
-        bellIv.setImageTintList(ColorStateList.valueOf(0xFFFFFFFF));
-        hTop.addView(bellIv);
+        ImageView backIv = new ImageView(this);
+        LinearLayout.LayoutParams backP = new LinearLayout.LayoutParams((int)(24*d),(int)(24*d));
+        backP.rightMargin = (int)(10*d);
+        backIv.setLayoutParams(backP);
+        backIv.setImageResource(R.drawable.ic_arrow_back);
+        backIv.setImageTintList(ColorStateList.valueOf(0xFFFFFFFF));
+        backIv.setClickable(true);
+        backIv.setFocusable(true);
+        hTop.addView(backIv);
 
         TextView tvHTitle = new TextView(this);
         tvHTitle.setText(isKhmer ? "ការជូនដំណឹង" : "Notifications");
@@ -372,7 +376,7 @@ public class Main_Activity extends AppCompatActivity {
         if (activeBadge != null) {
             activeBadge.setVisibility(View.GONE);
         }
-        if (grandTotal > 0) {
+        if (grandTotal >= 2) {
             android.graphics.drawable.GradientDrawable badgeBg = new android.graphics.drawable.GradientDrawable();
             badgeBg.setColor(0xFFE53935); badgeBg.setCornerRadius(20*d);
             TextView badgeTv = new TextView(this);
@@ -404,10 +408,7 @@ public class Main_Activity extends AppCompatActivity {
         LinearLayout body = new LinearLayout(this);
         body.setOrientation(LinearLayout.VERTICAL);
         body.setPadding(p16, p12, p16, (int)(24*d));
-        android.graphics.drawable.GradientDrawable bodyBg = new android.graphics.drawable.GradientDrawable();
-        bodyBg.setColor(0xFFF5F8FC);
-        bodyBg.setCornerRadii(new float[]{ 0, 0, 0, 0, 20*d, 20*d, 20*d, 20*d }); // round bottom corners matching dialog shape
-        body.setBackground(bodyBg);
+        body.setBackgroundColor(0xFFF5F8FC);
 
         // ── Budget Alerts ──
         if (hasMonthAlert || !catAlerts.isEmpty()) {
@@ -733,13 +734,32 @@ public class Main_Activity extends AppCompatActivity {
             body.addView(emptyL);
         }
 
+        // Premium Done button at the bottom of notifications list
+        com.google.android.material.button.MaterialButton btnDone = new com.google.android.material.button.MaterialButton(this);
+        LinearLayout.LayoutParams btnP = new LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT, (int)(52*d));
+        btnP.topMargin = (int)(24*d);
+        btnP.bottomMargin = (int)(24*d);
+        btnDone.setLayoutParams(btnP);
+        btnDone.setText(isKhmer ? "រួចរាល់" : "Done");
+        btnDone.setAllCaps(false);
+        btnDone.setTextSize(16);
+        btnDone.setTypeface(null, android.graphics.Typeface.BOLD);
+        btnDone.setTextColor(0xFFFFFFFF);
+        btnDone.setCornerRadius((int)(26*d));
+        btnDone.setBackgroundTintList(ColorStateList.valueOf(0xFF1565C0));
+        body.addView(btnDone);
+
         root.addView(body);
         scrollView.addView(root);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.RoundedDialog);
-        builder.setView(scrollView);
-        builder.setPositiveButton(isKhmer ? "បិទ" : "Done", null);
-        builder.show();
+        final android.app.Dialog dialog = new android.app.Dialog(this, R.style.FullScreenDialog);
+        dialog.setContentView(scrollView);
+
+        backIv.setOnClickListener(v -> dialog.dismiss());
+        btnDone.setOnClickListener(v -> dialog.dismiss());
+
+        dialog.show();
     }
 
     /** Section header with count chip */
@@ -926,11 +946,11 @@ public class Main_Activity extends AppCompatActivity {
             }
         }
 
-        // Auto-seed database if empty to showcase metrics and graphs
+        // Auto-seed database if empty to showcase metrics and graphs (only for guest)
         DatabaseHelper dbHelper = DatabaseHelper.getInstance(this);
         SupabaseAuthManager authManager = SupabaseAuthManager.getInstance(this);
         String email = authManager.isLoggedIn() ? authManager.getUserEmail() : "guest";
-        if (dbHelper.getTransactions(email).isEmpty()) {
+        if ("guest".equals(email) && dbHelper.getTransactions(email).isEmpty()) {
             seedSampleData(dbHelper, email);
         }
 
@@ -1031,7 +1051,7 @@ public class Main_Activity extends AppCompatActivity {
 
         private void showManageCategoriesDialog() {
             if (getActivity() == null) return;
-            android.content.SharedPreferences prefs = getActivity().getSharedPreferences("ExpenseTrackerPrefs", android.content.Context.MODE_PRIVATE);
+            android.content.SharedPreferences prefs = getPrefs(getActivity());
             String lang = prefs.getString("selected_language", "EN");
             boolean isKhmer = "KH".equals(lang);
 
@@ -1049,7 +1069,7 @@ public class Main_Activity extends AppCompatActivity {
 
         private void showAllTransactionsDialog() {
             if (getActivity() == null) return;
-            android.content.SharedPreferences prefs = getActivity().getSharedPreferences("ExpenseTrackerPrefs", android.content.Context.MODE_PRIVATE);
+            android.content.SharedPreferences prefs = getPrefs(getActivity());
             String lang = prefs.getString("selected_language", "EN");
             boolean isKhmer = "KH".equals(lang);
 
@@ -1139,7 +1159,7 @@ public class Main_Activity extends AppCompatActivity {
             TextView tvHomeGreeting = view.findViewById(R.id.tv_home_greeting);
             if (tvHomeGreeting != null && getActivity() != null) {
                 SupabaseAuthManager authManager = SupabaseAuthManager.getInstance(getActivity());
-                android.content.SharedPreferences prefs = getActivity().getSharedPreferences("ExpenseTrackerPrefs", android.content.Context.MODE_PRIVATE);
+                android.content.SharedPreferences prefs = getPrefs(getActivity());
                 String lang = prefs.getString("selected_language", "EN");
                 boolean isKhmer = "KH".equals(lang);
 
@@ -1390,69 +1410,80 @@ public class Main_Activity extends AppCompatActivity {
 
         private void showTransactionDetails(final DatabaseHelper.Transaction tx) {
             if (getActivity() == null) return;
-            android.content.SharedPreferences prefs = getActivity().getSharedPreferences("ExpenseTrackerPrefs", android.content.Context.MODE_PRIVATE);
+            android.content.SharedPreferences prefs = getPrefs(getActivity());
             String lang = prefs.getString("selected_language", "EN");
             boolean isKhmer = "KH".equals(lang);
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            View dialogView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_transaction_details, null);
 
-            android.widget.ScrollView scrollView = new android.widget.ScrollView(getActivity());
-            LinearLayout container = new LinearLayout(getActivity());
-            container.setOrientation(LinearLayout.VERTICAL);
-            container.setPadding(dpToPx(24), dpToPx(24), dpToPx(24), dpToPx(24));
+            com.google.android.material.card.MaterialCardView cardTxDetailsIconBg = dialogView.findViewById(R.id.cardTxDetailsIconBg);
+            ImageView ivTxDetailsIcon = dialogView.findViewById(R.id.ivTxDetailsIcon);
+            TextView tvTxDetailsTitle = dialogView.findViewById(R.id.tvTxDetailsTitle);
+            TextView tvTxDetailsAmount = dialogView.findViewById(R.id.tvTxDetailsAmount);
+            TextView tvTxDetailsType = dialogView.findViewById(R.id.tvTxDetailsType);
+            TextView tvTxDetailsCategory = dialogView.findViewById(R.id.tvTxDetailsCategory);
+            TextView tvTxDetailsDate = dialogView.findViewById(R.id.tvTxDetailsDate);
+            com.google.android.material.button.MaterialButton btnTxDetailsClose = dialogView.findViewById(R.id.btnTxDetailsClose);
+            TextView btnTxDetailsDelete = dialogView.findViewById(R.id.btnTxDetailsDelete);
 
-            // Title Note
-            TextView tvTitle = new TextView(getActivity());
-            tvTitle.setText(tx.note);
-            tvTitle.setTextSize(20);
-            tvTitle.setTypeface(null, android.graphics.Typeface.BOLD);
-            tvTitle.setTextColor(0xFF1A1C24);
-            container.addView(tvTitle);
+            // Labels for Translation
+            TextView tvLabelType = dialogView.findViewById(R.id.tvLabelType);
+            TextView tvLabelDetailsCategory = dialogView.findViewById(R.id.tvLabelDetailsCategory);
+            TextView tvLabelDate = dialogView.findViewById(R.id.tvLabelDate);
 
-            // Category & Type Details
-            TextView tvDetails = new TextView(getActivity());
+            if (tvLabelType != null) tvLabelType.setText(isKhmer ? "ប្រភេទ" : "Type");
+            if (tvLabelDetailsCategory != null) tvLabelDetailsCategory.setText(isKhmer ? "ប្រភេទចំណាយ" : "Category");
+            if (tvLabelDate != null) tvLabelDate.setText(isKhmer ? "កាលបរិច្ឆេទ" : "Date");
+
+            // Set Note Title
+            if (tvTxDetailsTitle != null) {
+                tvTxDetailsTitle.setText(tx.note);
+            }
+
+            // Amount & Type Styling
             String sign = "expense".equalsIgnoreCase(tx.type) ? "-" : "+";
             int amountColor = "expense".equalsIgnoreCase(tx.type) ? 0xFFF44336 : 0xFF4CAF50;
-
             String typeStr = isKhmer ? ("expense".equalsIgnoreCase(tx.type) ? "ចំណាយ" : "ចំណូល") : tx.type.toUpperCase();
-            String catStr = translateText(tx.category, isKhmer);
 
-            String detailsTemplate = isKhmer ? "ប្រភេទ៖ %s\nប្រភេទចំណាយ៖ %s\nកាលបរិច្ឆេទ៖ %s" 
-                                             : "Type: %s\nCategory: %s\nDate: %s";
+            if (tvTxDetailsAmount != null) {
+                tvTxDetailsAmount.setText(sign + formatAmount(getActivity(), tx.amount));
+                tvTxDetailsAmount.setTextColor(amountColor);
+            }
 
-            tvDetails.setText(String.format(Locale.US, detailsTemplate, typeStr, catStr, tx.date));
-            tvDetails.setTextSize(14);
-            tvDetails.setTextColor(0xFF9DA3B4);
-            tvDetails.setLineSpacing(4, 1);
-            LinearLayout.LayoutParams detailsParams = new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            detailsParams.setMargins(0, dpToPx(12), 0, 0);
-            tvDetails.setLayoutParams(detailsParams);
-            container.addView(tvDetails);
+            if (tvTxDetailsType != null) {
+                tvTxDetailsType.setText(typeStr);
+                tvTxDetailsType.setTextColor(amountColor);
+            }
 
-            // Amount
-            TextView tvAmount = new TextView(getActivity());
-            tvAmount.setText(sign + formatAmount(getActivity(), tx.amount));
-            tvAmount.setTextSize(26);
-            tvAmount.setTypeface(null, android.graphics.Typeface.BOLD);
-            tvAmount.setTextColor(amountColor);
-            LinearLayout.LayoutParams amountParams = new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            amountParams.setMargins(0, dpToPx(16), 0, 0);
-            tvAmount.setLayoutParams(amountParams);
-            container.addView(tvAmount);
+            if (tvTxDetailsCategory != null) {
+                tvTxDetailsCategory.setText(translateText(tx.category, isKhmer));
+            }
 
-            scrollView.addView(container);
-            builder.setView(scrollView);
+            if (tvTxDetailsDate != null) {
+                tvTxDetailsDate.setText(tx.date);
+            }
 
-            builder.setPositiveButton(isKhmer ? "បិទ" : "Close", null);
-            builder.setNegativeButton(isKhmer ? "លុប" : "Delete", null);
+            // Icon background & tint
+            if (cardTxDetailsIconBg != null) {
+                cardTxDetailsIconBg.setCardBackgroundColor(android.content.res.ColorStateList.valueOf(HomeFragment.getCategoryBgColor(tx.category)));
+            }
+            if (ivTxDetailsIcon != null) {
+                ivTxDetailsIcon.setImageResource(HomeFragment.getCategoryIcon(tx.category));
+                ivTxDetailsIcon.setImageTintList(android.content.res.ColorStateList.valueOf(HomeFragment.getCategoryIconTint(tx.category)));
+            }
 
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.RoundedDialog);
+            builder.setView(dialogView);
             final AlertDialog dialog = builder.create();
 
-            dialog.setOnShowListener(dialogInterface -> {
-                // Delete transaction listener
-                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener(v -> {
+            if (btnTxDetailsClose != null) {
+                btnTxDetailsClose.setText(isKhmer ? "បិទ" : "Close");
+                btnTxDetailsClose.setOnClickListener(v -> dialog.dismiss());
+            }
+
+            if (btnTxDetailsDelete != null) {
+                btnTxDetailsDelete.setText(isKhmer ? "លុបប្រតិបត្តិការ" : "Delete Transaction");
+                btnTxDetailsDelete.setOnClickListener(v -> {
                     new AlertDialog.Builder(getActivity())
                             .setTitle(isKhmer ? "លុបប្រតិបត្តិការ" : "Delete Transaction")
                             .setMessage(isKhmer ? "តើអ្នកប្រាកដជាចង់លុបប្រតិបត្តិការនេះមែនទេ?" : "Are you sure you want to delete this transaction?")
@@ -1467,7 +1498,7 @@ public class Main_Activity extends AppCompatActivity {
                             .setNegativeButton(isKhmer ? "ទេ" : "No", null)
                             .show();
                 });
-            });
+            }
 
             dialog.show();
         }
@@ -1579,7 +1610,7 @@ public class Main_Activity extends AppCompatActivity {
 
         private void showSetBudgetDialog(final String prefKey, String title, float defaultValue) {
             if (getContext() == null) return;
-            final android.content.SharedPreferences prefs = getContext().getSharedPreferences("ExpenseTrackerPrefs", android.content.Context.MODE_PRIVATE);
+            final android.content.SharedPreferences prefs = getPrefs(getContext());
             float currentLimit = prefs.getFloat(prefKey, defaultValue);
 
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -1620,7 +1651,7 @@ public class Main_Activity extends AppCompatActivity {
 
         private void showAllCategoryBudgetsDialog() {
             if (getActivity() == null) return;
-            android.content.SharedPreferences prefs = getActivity().getSharedPreferences("ExpenseTrackerPrefs", android.content.Context.MODE_PRIVATE);
+            android.content.SharedPreferences prefs = getPrefs(getActivity());
             String lang = prefs.getString("selected_language", "EN");
             boolean isKhmer = "KH".equals(lang);
 
@@ -1846,7 +1877,7 @@ public class Main_Activity extends AppCompatActivity {
             }
 
             // 3. Monthly Progress Card
-            android.content.SharedPreferences prefs = getContext().getSharedPreferences("ExpenseTrackerPrefs", android.content.Context.MODE_PRIVATE);
+            android.content.SharedPreferences prefs = getPrefs(getContext());
             double monthLimit = prefs.getFloat("monthly_budget_limit", 1000.00f);
             SimpleDateFormat dbFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
             Calendar cal = Calendar.getInstance();
@@ -1890,7 +1921,7 @@ public class Main_Activity extends AppCompatActivity {
 
                 List<DatabaseHelper.CategoryBudget> cbList = dbHelper.getCategoryBudgets(email);
                 boolean seededCb = prefs.getBoolean("seeded_category_budgets", false);
-                if (cbList.isEmpty() && !seededCb) {
+                if ("guest".equals(email) && cbList.isEmpty() && !seededCb) {
                     // Seed defaults if empty
                     dbHelper.insertCategoryBudget(new DatabaseHelper.CategoryBudget(
                             java.util.UUID.randomUUID().toString(), email, "Food", 300.00
@@ -2051,7 +2082,7 @@ public class Main_Activity extends AppCompatActivity {
                 layoutSavingGoals.removeAllViews();
                 List<DatabaseHelper.SavingGoal> goals = dbHelper.getSavingGoals(email);
                 boolean seededGoals = prefs.getBoolean("seeded_saving_goals", false);
-                if (goals.isEmpty() && !seededGoals) {
+                if ("guest".equals(email) && goals.isEmpty() && !seededGoals) {
                     DatabaseHelper.SavingGoal defaultGoal = new DatabaseHelper.SavingGoal(
                             java.util.UUID.randomUUID().toString(), email, "New Laptop", 1000.00, 250.00
                     );
@@ -2182,7 +2213,7 @@ public class Main_Activity extends AppCompatActivity {
                 layoutRecurringPayments.removeAllViews();
                 List<DatabaseHelper.RecurringPayment> recs = dbHelper.getRecurringPayments(email);
                 boolean seededRecs = prefs.getBoolean("seeded_recurring_payments", false);
-                if (recs.isEmpty() && !seededRecs) {
+                if ("guest".equals(email) && recs.isEmpty() && !seededRecs) {
                     DatabaseHelper.RecurringPayment rec1 = new DatabaseHelper.RecurringPayment(
                             java.util.UUID.randomUUID().toString(), email, "Rent", 1200.00, "MONTHLY", "2026-07-01"
                     );
@@ -2512,7 +2543,7 @@ public class Main_Activity extends AppCompatActivity {
 
         private void showAddEditCategoryBudgetDialog(final DatabaseHelper.CategoryBudget cb) {
             if (getActivity() == null) return;
-            android.content.SharedPreferences prefs = getActivity().getSharedPreferences("ExpenseTrackerPrefs", android.content.Context.MODE_PRIVATE);
+            android.content.SharedPreferences prefs = getPrefs(getActivity());
             String lang = prefs.getString("selected_language", "EN");
             boolean isKhmer = "KH".equals(lang);
 
@@ -2941,7 +2972,7 @@ public class Main_Activity extends AppCompatActivity {
                 
                 if (getActivity() != null) {
                     SupabaseAuthManager authManager = SupabaseAuthManager.getInstance(getActivity());
-                    android.content.SharedPreferences prefs = getActivity().getSharedPreferences("ExpenseTrackerPrefs", android.content.Context.MODE_PRIVATE);
+                    android.content.SharedPreferences prefs = getPrefs(getActivity());
 
                     TextView tvProfileEmail = view.findViewById(R.id.tv_profile_email);
                     if (tvProfileEmail != null) {
@@ -3111,7 +3142,9 @@ public class Main_Activity extends AppCompatActivity {
                 if (btnLogout != null) {
                     btnLogout.setOnClickListener(v -> {
                         if (getActivity() != null) {
+                            // Logout from Supabase
                             SupabaseAuthManager.getInstance(getActivity()).logout();
+                            
                             Intent intent = new Intent(getActivity(), LoginActivity.class);
                             startActivity(intent);
                             getActivity().finish();
@@ -3124,7 +3157,7 @@ public class Main_Activity extends AppCompatActivity {
 
             private void updateProfileUISettings(View view) {
                 if (getContext() == null) return;
-                android.content.SharedPreferences prefs = getContext().getSharedPreferences("ExpenseTrackerPrefs", android.content.Context.MODE_PRIVATE);
+                android.content.SharedPreferences prefs = getPrefs(getContext());
                 float density = getResources().getDisplayMetrics().density;
 
                 // 1. Currency Display
@@ -3273,7 +3306,7 @@ public class Main_Activity extends AppCompatActivity {
 
     public static void translateView(android.content.Context context, View view) {
         if (view == null || context == null) return;
-        android.content.SharedPreferences prefs = context.getSharedPreferences("ExpenseTrackerPrefs", android.content.Context.MODE_PRIVATE);
+        android.content.SharedPreferences prefs = getPrefs(context);
         String lang = prefs.getString("selected_language", "EN");
         boolean isKhmer = "KH".equals(lang);
 
@@ -3731,7 +3764,7 @@ public class Main_Activity extends AppCompatActivity {
         public void onBindViewHolder(@NonNull TransactionViewHolder holder, int position) {
             final DatabaseHelper.Transaction tx = transactions.get(position);
             holder.tvTxTitle.setText(tx.note);
-            holder.tvTxCategory.setText(translateText(tx.category, "KH".equals(context.getSharedPreferences("ExpenseTrackerPrefs", android.content.Context.MODE_PRIVATE).getString("selected_language", "EN"))));
+            holder.tvTxCategory.setText(translateText(tx.category, "KH".equals(getPrefs(context).getString("selected_language", "EN"))));
             holder.tvTxDate.setText(tx.date);
 
             // Category styling using parent class helpers

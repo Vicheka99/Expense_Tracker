@@ -23,4 +23,12 @@
         <item name="android:windowMinWidthMinor">90%</item>
         <item name="colorPrimary">@color/primary_blue</item>
     </style>
+
+    <!-- Full Screen Dialog Style -->
+    <style name="FullScreenDialog" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowBackground">#F5F8FC</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:statusBarColor">#1565C0</item>
+    </style>
 </resources>

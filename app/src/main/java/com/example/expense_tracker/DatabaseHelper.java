@@ -518,4 +518,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return exists;
     }
+
+    public void clearUserData(String userEmail) {
+        if (userEmail == null || userEmail.trim().isEmpty() || "No user email".equals(userEmail)) return;
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_TRANSACTIONS, COL_USER_EMAIL + "=?", new String[]{userEmail});
+        db.delete(TABLE_SAVING_GOALS, COL_GOAL_USER_EMAIL + "=?", new String[]{userEmail});
+        db.delete(TABLE_RECURRING, COL_REC_USER_EMAIL + "=?", new String[]{userEmail});
+        db.delete(TABLE_CAT_BUDGETS, COL_CB_USER_EMAIL + "=?", new String[]{userEmail});
+    }
+
+    public void clearAllData() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_TRANSACTIONS, null, null);
+        db.delete(TABLE_SAVING_GOALS, null, null);
+        db.delete(TABLE_RECURRING, null, null);
+        db.delete(TABLE_CAT_BUDGETS, null, null);
+    }
 }
